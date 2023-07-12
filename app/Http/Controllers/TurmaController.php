@@ -3,17 +3,21 @@
 namespace App\Http\Controllers;
 
 use App\Models\TurmasModel;
+use Illuminate\Contracts\View\Factory;
+use Illuminate\Contracts\View\View;
+use Illuminate\Foundation\Application;
 use Illuminate\Http\Request;
 
 class TurmaController extends Controller
 {
     /**
-     * @param $filter
-     * @return array
+     * @param array $filter
+     * @return \Illuminate\Contracts\Foundation\Application|Factory|View|Application
      */
-    public function index($filter): array
+    public function index(array $filter = []): Application|View|Factory|\Illuminate\Contracts\Foundation\Application
     {
-        return TurmasModel::getTurmas($filter);
+        $turmas = TurmasModel::getTurmas($filter);
+        return view('turma.index')->with('turmas', $turmas);
     }
 
     /**

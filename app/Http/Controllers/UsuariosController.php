@@ -3,16 +3,20 @@
 namespace App\Http\Controllers;
 
 use App\Models\UsuariosModel;
+use Illuminate\Contracts\Foundation\Application;
+use Illuminate\Contracts\View\Factory;
+use Illuminate\Contracts\View\View;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Session;
+use Illuminate\Validation\ValidationException;
 
 class UsuariosController extends Controller
 {
     /**
      * @param Request $request
-     * @return bool
+     * @return \Illuminate\Http\RedirectResponse
      */
-    public function verifyUser(Request $request): bool
+    public function verifyUser(Request $request): \Illuminate\Http\RedirectResponse
     {
         $validated = $request->validate([
             'email' => 'bail|email',
@@ -24,10 +28,31 @@ class UsuariosController extends Controller
         if (!empty($searchUser)) {
             Session::put('id', $searchUser[0]->id);
             Session::put('user_type', $searchUser[0]->tipo_usuario);
-            return true;
+            return to_route('index.turmas');
         }
 
-        return false;
+        $request->session()->flash('mensagem', 'Dados incorretos.');
+        return to_route('index.usuarios');
+    }
+
+    /**
+     * @param Request $request
+     * @return Application|Factory|View|\Illuminate\Foundation\Application
+     */
+    public function index(Request $request)
+    {
+        $mensagem = $request->session()->get('mensagem');
+        return view('usuario.login')->with('mensagem', $mensagem);
+    }
+
+    /**
+     * @param Request $request
+     * @return Application|Factory|View|\Illuminate\Foundation\Application
+     */
+    public function register(Request $request)
+    {
+        $mensagem = $request->session()->get('mensagem');
+        return view('usuario.register')->with('mensagem', $mensagem);
     }
 
     /**
@@ -45,19 +70,31 @@ class UsuariosController extends Controller
      */
     public function store(Request $request): string
     {
-        $validated = $request->validate([
-            'nome' => 'bail|string',
-            'email' => 'bail|email',
-            'matricula' => 'bail|integer',
-            'curso' => 'bail|string',
-            'senha' => 'bail|string',
-            'avatar' => 'bail|nullable',
-            'tipo_usuario' => 'bail|integer'
-        ]);
+        try {
+            $validated = $request->validate([
+                'nome' => 'bail|string',
+                'email' => 'bail|email',
+                'matricula' => 'bail|required|integer',
+                'curso' => 'bail|string',
+                'senha' => 'bail|string',
+                'avatar' => 'bail|nullable',
+                'tipo_usuario' => 'bail|integer'
+            ]);
 
-        $values = array_values($validated); // Padronizando Colunas para inserção SQL
+            $values = array_values($validated); // Padronizando Colunas para inserção SQL
 
-        return UsuariosModel::createUser($values);
+            try {
+                UsuariosModel::createUser($values);
+                $request->session()->flash('mensagem', 'Usuário registrado com Sucesso.');
+                return to_route('index.usuarios');
+            } catch (\Exception $exception) {
+                $request->session()->flash('mensagem', $exception);
+                return to_route('register.usuario');
+            }
+        } catch (ValidationException|\Exception $exception) {
+            $request->session()->flash('mensagem', $exception);
+            return to_route('register.usuario');
+        }
     }
 
     /**

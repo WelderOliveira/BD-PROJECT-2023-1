@@ -18,27 +18,28 @@ class TurmasModel extends Model
      */
     public static function getTurmas(array $filter): array
     {
-        $query = 'SELECT * FROM tb_turma WHERE 1 = 1';
+        $query = 'SELECT * FROM vw_turma WHERE 1 = 1';
 
-        if (!empty($periodo = $filter['periodo'])) {
+        if (isset($filter['periodo']) && !empty($periodo = $filter['periodo'])) {
             $query .= " AND periodo = '$periodo'";
         }
 
-        if (!empty($professor = $filter['professor'])) {
+        if (isset($filter['professor']) && !empty($professor = $filter['professor'])) {
             $query .= " AND professor LIKE %'$professor'%";
         }
 
-        if (!empty($horario = $filter['horario'])) {
+        if (isset($filter['horario']) && !empty($horario = $filter['horario'])) {
             $query .= " AND horario LIKE %'$horario'%";
         }
 
-        if (!empty($disciplina = $filter['disciplina'])) {
+        if (isset($filter['disciplina']) && !empty($disciplina = $filter['disciplina'])) {
             $query .= " AND disciplina = '$disciplina'";
         }
 
-        if (!empty($departamento = $filter['carga_horaria'])) {
+        if (isset($filter['carga_horaria']) && !empty($departamento = $filter['carga_horaria'])) {
             $query .= " AND carga_horaria = '$departamento'";
         }
+        $query .= " LIMIT 20";
 
         return DB::select($query);
     }
