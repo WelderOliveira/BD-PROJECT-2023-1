@@ -4,45 +4,47 @@ namespace App\Http\Controllers;
 
 use App\Models\UsuariosModel;
 use Illuminate\Http\Request;
-use Illuminate\Support\Facades\DB;
+use Illuminate\Support\Facades\Session;
 
 class UsuariosController extends Controller
 {
     /**
-     * Display a listing of the resource.
+     * @param Request $request
+     * @return bool
      */
-    public function index()
+    public function verifyUser(Request $request): bool
     {
+        $validated = $request->validate([
+            'email' => 'bail|email',
+            'senha' => 'bail|string'
+        ]);
 
+        $searchUser = UsuariosModel::getUsuario($validated['email'], $validated['senha']);
+
+        if (!empty($searchUser)) {
+            Session::put('id', $searchUser[0]->id);
+            Session::put('user_type', $searchUser[0]->tipo_usuario);
+            return true;
+        }
+
+        return false;
     }
 
     /**
-     * Show the form for creating a new resource.
+     * @return void
      */
     public function create()
     {
-        //
+        // Redirecionar para tela de Registro de usuário
     }
 
     /**
-     * Store a newly created resource in storage.
+     * @param Request $request
+     * @return string
      * @throws \Throwable
      */
-    public function store(Request $request)
+    public function store(Request $request): string
     {
-//        $image = "C:\\Users\\Will\\Pictures\\Captura de tela 2021-06-30 174209.png"; // be careful that the path is correct
-
-//        $resp = base64_encode(file_get_contents($image));
-//        dd($resp);
-//        $data = fopen($image, 'rb');
-//        $size = filesize($image);
-//        $contents = fread($data, $size);
-//        fclose($data);
-//
-//        $encoded = base64_encode($contents);
-//
-//        dd();
-//        dd($request);
         $validated = $request->validate([
             'nome' => 'bail|string',
             'email' => 'bail|email',
@@ -53,40 +55,66 @@ class UsuariosController extends Controller
             'tipo_usuario' => 'bail|integer'
         ]);
 
-        $values = array_values($validated); //Padronizando Colunas para inserção SQL
+        $values = array_values($validated); // Padronizando Colunas para inserção SQL
 
         return UsuariosModel::createUser($values);
     }
 
     /**
-     * Display the specified resource.
+     * @param string $id
+     * @return mixed
      */
-    public function show(string $id)
+    public function show(string $id): mixed
     {
-        //
+        return UsuariosModel::getUserById($id)[0];
     }
 
     /**
-     * Show the form for editing the specified resource.
+     * @param string $id
+     * @return mixed
      */
-    public function edit(string $id)
+    public function edit(string $id): mixed
     {
-        //
+        return UsuariosModel::getUserById($id)[0];
     }
 
     /**
-     * Update the specified resource in storage.
+     * @param Request $request
+     * @param $id
+     * @return string
+     * @throws \Throwable
      */
-    public function update(Request $request, string $id)
+    public function update(Request $request, $id): string
     {
-        //
+        try {
+            $validated = $request->validate([
+                'nome' => 'bail|string',
+                'email' => 'bail|email',
+                'matricula' => 'bail|integer',
+                'curso' => 'bail|string',
+                'senha' => 'bail|string',
+                'avatar' => 'bail|nullable',
+                'tipo_usuario' => 'bail|integer'
+            ]);
+
+            UsuariosModel::updateUser($validated, (int)$id);
+            return json_encode(UsuariosModel::getUserById($id)[0]);
+        } catch (\Exception $exception) {
+            return $exception->getMessage();
+        }
     }
 
     /**
-     * Remove the specified resource from storage.
+     * @param int $id
+     * @return string
+     * @throws \Throwable
      */
-    public function destroy(string $id)
+    public function destroy(int $id): string
     {
-        //
+        try {
+            return UsuariosModel::deleteUser($id);
+        } catch (\Exception $exception) {
+            return $exception->getMessage();
+        }
     }
 }
