@@ -2,20 +2,22 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\AvaliacoesModel;
 use Illuminate\Http\Request;
 
 class AvaliacaoController extends Controller
 {
     /**
-     * Display a listing of the resource.
+     * @param $filter
+     * @return array
      */
-    public function index()
+    public function index($filter): array
     {
-        //
+        return AvaliacoesModel::getAvaliacoes($filter);
     }
 
     /**
-     * Show the form for creating a new resource.
+     * @return void
      */
     public function create()
     {
@@ -23,42 +25,78 @@ class AvaliacaoController extends Controller
     }
 
     /**
-     * Store a newly created resource in storage.
+     * @param Request $request
+     * @return string
+     * @throws \Throwable
      */
-    public function store(Request $request)
+    public function store(Request $request): string
     {
-        //
+        $validated = $request->validate([
+            'fk_user' => 'bail|integer',
+            'fk_turma' => 'bail|integer',
+            'nota' => 'bail|integer',
+            'descricao' => 'bail|string',
+            'fk_professor' => 'bail|integer',
+        ]);
+
+        $values = array_values($validated); // Padronizando Colunas para inserção SQL
+
+        return AvaliacoesModel::createAvaliacao($values);
     }
 
     /**
-     * Display the specified resource.
+     * @param int $id
+     * @return mixed
      */
-    public function show(string $id)
+    public function show(int $id): mixed
     {
-        //
+        return AvaliacoesModel::getAvaliacaoById($id)[0];
     }
 
     /**
-     * Show the form for editing the specified resource.
+     * @param int $id
+     * @return mixed
      */
-    public function edit(string $id)
+    public function edit(int $id): mixed
     {
-        //
+        return AvaliacoesModel::getAvaliacaoById($id)[0];
     }
 
     /**
-     * Update the specified resource in storage.
+     * @param Request $request
+     * @param int $id
+     * @return bool|string
+     * @throws \Throwable
      */
-    public function update(Request $request, string $id)
+    public function update(Request $request, int $id): bool|string
     {
-        //
+        try {
+            $validated = $request->validate([
+                'fk_user' => 'bail|integer',
+                'fk_turma' => 'bail|integer',
+                'nota' => 'bail|integer',
+                'descricao' => 'bail|string',
+                'fk_professor' => 'bail|integer',
+            ]);
+
+            AvaliacoesModel::updateAvaliacao($validated, $id);
+            return json_encode(AvaliacoesModel::getAvaliacaoById($id)[0]);
+        } catch (\Exception $exception) {
+            return $exception->getMessage();
+        }
     }
 
     /**
-     * Remove the specified resource from storage.
+     * @param int $id
+     * @return string
+     * @throws \Throwable
      */
-    public function destroy(string $id)
+    public function destroy(int $id): string
     {
-        //
+        try {
+            return AvaliacoesModel::deleteAvaliacao($id);
+        } catch (\Exception $exception) {
+            return $exception->getMessage();
+        }
     }
 }

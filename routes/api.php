@@ -28,6 +28,13 @@ Route::prefix('/usuarios')->group(function () {
 Route::prefix('/turmas')->group(function () {
     Route::get('/', [\App\Http\Controllers\TurmaController::class, 'index'])->name('index.turmas');
     Route::post('/create', [\App\Http\Controllers\TurmaController::class, 'store'])->name('store.turmas');
-    Route::get('/delete/{id}',[\App\Http\Controllers\TurmaController::class,'destroy'])->name('delete.turmas');
-    Route::post('/edit/{id}',[\App\Http\Controllers\TurmaController::class, 'update'])->name('update.turmas');
+    Route::get('/delete/{id}', [\App\Http\Controllers\TurmaController::class, 'destroy'])->name('delete.turmas');
+    Route::post('/edit/{id}', [\App\Http\Controllers\TurmaController::class, 'update'])->name('update.turmas');
+});
+
+Route::prefix('/avaliacao')->group(function () {
+    Route::get('/', [\App\Http\Controllers\AvaliacaoController::class, 'index'])->name('index.avaliacao');
+    Route::post('/create', [\App\Http\Controllers\AvaliacaoController::class, 'store'])->name('store.avaliacao');
+    Route::get('/delete/{id}', [\App\Http\Controllers\AvaliacaoController::class, 'destroy'])->name('delete.avaliacao');
+    Route::post('/edit/{id}', [\App\Http\Controllers\AvaliacaoController::class, 'update'])->name('update.avaliacao');
 });
