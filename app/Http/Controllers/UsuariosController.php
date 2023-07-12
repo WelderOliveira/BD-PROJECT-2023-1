@@ -94,7 +94,7 @@ class UsuariosController extends Controller
                 'curso' => 'bail|string',
                 'senha' => 'bail|string',
                 'avatar' => 'bail|nullable',
-                'tipo_usuario' => 'bail|integer'
+                'tipo_usuario' => 'bail|integer',
             ]);
 
             UsuariosModel::updateUser($validated, (int)$id);
