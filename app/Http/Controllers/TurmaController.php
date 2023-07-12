@@ -68,11 +68,11 @@ class TurmaController extends Controller
 
     /**
      * @param Request $request
-     * @param string $id
-     * @return false|string
+     * @param int $id
+     * @return bool|string
      * @throws \Throwable
      */
-    public function update(Request $request, string $id): bool|string
+    public function update(Request $request, int $id): bool|string
     {
         try {
             $validated = $request->validate([
@@ -93,11 +93,11 @@ class TurmaController extends Controller
     }
 
     /**
-     * @param string $id
+     * @param int $id
      * @return string
      * @throws \Throwable
      */
-    public function destroy(string $id): string
+    public function destroy(int $id): string
     {
         try {
             return TurmasModel::deleteTurma($id);
