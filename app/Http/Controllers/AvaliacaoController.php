@@ -130,16 +130,21 @@ class AvaliacaoController extends Controller
     }
 
     /**
+     * @param Request $request
      * @param int $id
      * @return string
      * @throws \Throwable
      */
-    public function destroy(int $id): string
+    public function destroy(Request $request, int $id): string
     {
         try {
-            return AvaliacoesModel::deleteAvaliacao($id);
+            AvaliacoesModel::deleteAvaliacao($id);
+            $request->session()->flash('mensagem', 'Comentário removido com Sucesso');
+            return to_route('index.turmas');
+
         } catch (\Exception $exception) {
-            return $exception->getMessage();
+            $request->session()->flash('error', $exception->getMessage());
+            return to_route('index.turmas');
         }
     }
 
