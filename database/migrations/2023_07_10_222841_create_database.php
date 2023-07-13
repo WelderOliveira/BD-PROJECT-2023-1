@@ -10,7 +10,7 @@ return new class extends Migration {
      */
     public function up(): void
     {
-        \Illuminate\Support\Facades\DB::unprepared(file_get_contents('storage/app/public/db-create.sql'));
+        \Illuminate\Support\Facades\DB::unprepared(file_get_contents("database/files/bd_project_2023_1.sql"));
     }
 
     /**
