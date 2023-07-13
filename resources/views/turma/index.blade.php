@@ -46,7 +46,7 @@
                 <td>{{$turma->disciplina}}</td>
                 <td>{{$turma->departamento}}</td>
                 <td>
-                    @if(session()->has('id'))
+                    @if(session()->has('admin'))
                         <form action="{{route('delete.turmas',$turma->id)}}" method="POST">
                             {{ csrf_field() }}
                             {{ method_field('DELETE') }}

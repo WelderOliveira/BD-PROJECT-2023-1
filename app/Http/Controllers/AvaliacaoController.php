@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Models\AvaliacoesModel;
+use App\Models\DenunciasModel;
 use App\Models\TurmasModel;
 use Illuminate\Contracts\Foundation\Application;
 use Illuminate\Contracts\View\Factory;
@@ -50,6 +51,33 @@ class AvaliacaoController extends Controller
         try {
             AvaliacoesModel::createAvaliacao($values);
             $request->session()->flash('mensagem', 'Avaliação registrada com Sucesso');
+            return to_route('index.turmas');
+
+        } catch (\Exception $exception) {
+
+            $request->session()->flash('error', $exception->getMessage());
+            return to_route('index.turmas');
+        }
+    }
+
+    /**
+     * @param Request $request
+     * @param int $id
+     * @return string
+     * @throws \Throwable
+     */
+    public function denuncia(Request $request, int $id): string
+    {
+        $filter = [
+            'descricao' => 'Favor analisar esse comentário',
+            'avaliacao' => $id,
+        ];
+
+        $values = array_values($filter); // Padronizando Colunas para inserção SQL
+
+        try {
+            DenunciasModel::createDenuncia($values);
+            $request->session()->flash('mensagem', 'Denuncia registrada com Sucesso');
             return to_route('index.turmas');
 
         } catch (\Exception $exception) {
@@ -113,5 +141,14 @@ class AvaliacaoController extends Controller
         } catch (\Exception $exception) {
             return $exception->getMessage();
         }
+    }
+
+    /**
+     * @return Application|Factory|View|\Illuminate\Foundation\Application
+     */
+    public function indexDenuncia(): Application|Factory|View|\Illuminate\Foundation\Application
+    {
+        $responses = DenunciasModel::getAllDenuncia();
+        return view('avaliacao.denuncia')->with('responses', $responses);
     }
 }

@@ -37,8 +37,10 @@ Route::prefix('/turmas')->group(function () {
 
 Route::prefix('/avaliacao')->group(function () {
     Route::get('/', [\App\Http\Controllers\AvaliacaoController::class, 'index'])->name('index.avaliacao');
-    Route::get('/create/{id}',[\App\Http\Controllers\AvaliacaoController::class,'create'])->name('create.avaliacao');
+    Route::get('/create/{id}', [\App\Http\Controllers\AvaliacaoController::class, 'create'])->name('create.avaliacao');
     Route::post('/store', [\App\Http\Controllers\AvaliacaoController::class, 'store'])->name('store.avaliacao');
     Route::delete('/delete/{id}', [\App\Http\Controllers\AvaliacaoController::class, 'destroy'])->name('delete.avaliacao');
     Route::put('/edit/{id}', [\App\Http\Controllers\AvaliacaoController::class, 'update'])->name('update.avaliacao');
+    Route::post('/denuncia/{id}', [\App\Http\Controllers\AvaliacaoController::class, 'denuncia'])->name('denuncia.avaliacao');
+    Route::get('/denuncias', [\App\Http\Controllers\AvaliacaoController::class, 'indexDenuncia'])->name('indexDenuncia.avaliacao');
 });

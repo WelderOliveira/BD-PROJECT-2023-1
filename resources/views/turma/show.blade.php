@@ -26,12 +26,38 @@
             @foreach($comments as $comment)
                 <div class="card mb-3">
                     <div class="card-header">
-                        Nota: {{$comment->nota}}
+                        <div class="row">
+                            <div class="col-8">
+                                Nota: {{$comment->nota}}
+                            </div>
+                            <div class="col">
+                                <div style="text-align: right">
+                                    <form action="{{route('denuncia.avaliacao', $comment->id)}}" method="post">
+                                        @csrf
+                                        <button type="submit" class="btn btn-info"><i
+                                                class="fa-regular fa-circle-question"></i></button>
+                                    </form>
+                                    <div class="mt-1">
+                                        @if(session()->has('admin'))
+                                            <form action="{{route('delete.avaliacao',$comment->id)}}" method="POST">
+                                                {{ csrf_field() }}
+                                                {{ method_field('DELETE') }}
+
+                                                <button type="submit" class="btn btn-danger"><i
+                                                        class="fa-solid fa-trash"></i>
+                                                </button>
+                                            </form>
+                                        @endif
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
                     </div>
                     <div class="card-body">
                         <blockquote class="blockquote mb-0">
                             <p>{{$comment->descricao}}</p>
-                            <footer class="blockquote-footer">{{$comment->nome}} - <cite title="{{$comment->curso}}">{{$comment->curso}}</cite></footer>
+                            <footer class="blockquote-footer">{{$comment->nome}} - <cite
+                                    title="{{$comment->curso}}">{{$comment->curso}}</cite></footer>
                         </blockquote>
                     </div>
                 </div>

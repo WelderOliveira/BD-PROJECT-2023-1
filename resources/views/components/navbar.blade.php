@@ -30,8 +30,10 @@
                     <li class="nav-item">
                         <a class="nav-link" href="{{route('index.avaliacao')}}">Avaliações</a>
                     </li>
+                @endif
+                @if(session()->has('admin'))
                     <li class="nav-item">
-                        <a class="nav-link" href="#">Projects</a>
+                        <a class="nav-link" href="{{route('indexDenuncia.avaliacao')}}">Denuncias</a>
                     </li>
                 @endif
             </ul>
