@@ -50,7 +50,7 @@ class TurmasModel extends Model
      */
     public static function getTurmaById(int $id): array
     {
-        $query = "SELECT * FROM tb_turma WHERE id = $id";
+        $query = "SELECT * FROM vw_turma WHERE id = $id";
         return DB::select($query);
     }
 

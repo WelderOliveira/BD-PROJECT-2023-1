@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\AvaliacoesModel;
 use App\Models\TurmasModel;
 use Illuminate\Contracts\View\Factory;
 use Illuminate\Contracts\View\View;
@@ -11,8 +12,8 @@ use Illuminate\Http\Request;
 class TurmaController extends Controller
 {
     /**
-     * @param array $filter
-     * @return \Illuminate\Contracts\Foundation\Application|Application|Factory|View
+     * @param Request $request
+     * @return \Illuminate\Contracts\Foundation\Application|Factory|View|Application
      */
     public function index(Request $request): \Illuminate\Contracts\Foundation\Application|Factory|View|Application
     {
@@ -65,7 +66,10 @@ class TurmaController extends Controller
      */
     public function show(int $id): mixed
     {
-        return TurmasModel::getTurmaById($id)[0];
+        $response = TurmasModel::getTurmaById($id)[0];
+        $comments = AvaliacoesModel::getAvaliacoes(['id_turma' => $id]);
+
+        return view('turma.show')->with('response', $response)->with('comments', $comments);
     }
 
     /**

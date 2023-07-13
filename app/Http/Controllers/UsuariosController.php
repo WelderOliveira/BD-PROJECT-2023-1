@@ -8,6 +8,7 @@ use Illuminate\Contracts\View\Factory;
 use Illuminate\Contracts\View\View;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Session;
+use Illuminate\Validation\Rule;
 use Illuminate\Validation\ValidationException;
 
 class UsuariosController extends Controller
@@ -27,12 +28,23 @@ class UsuariosController extends Controller
 
         if (!empty($searchUser)) {
             Session::put('id', $searchUser[0]->id);
-            Session::put('user_type', $searchUser[0]->tipo_usuario);
+            if ($searchUser[0]->admin) {
+                Session::put('admin', $searchUser[0]->admin);
+            }
             return to_route('index.turmas');
         }
 
         $request->session()->flash('mensagem', 'Dados incorretos.');
         return to_route('index.usuarios');
+    }
+
+    /**
+     * @return Application|\Illuminate\Foundation\Application|\Illuminate\Http\RedirectResponse|\Illuminate\Routing\Redirector
+     */
+    public function logoutUser()
+    {
+        Session::flush();
+        return redirect('/');
     }
 
     /**
@@ -56,14 +68,6 @@ class UsuariosController extends Controller
     }
 
     /**
-     * @return void
-     */
-    public function create()
-    {
-        // Redirecionar para tela de Registro de usuário
-    }
-
-    /**
      * @param Request $request
      * @return string
      * @throws \Throwable
@@ -73,12 +77,15 @@ class UsuariosController extends Controller
         try {
             $validated = $request->validate([
                 'nome' => 'bail|string',
-                'email' => 'bail|email',
+                'email' => [
+                    'required',
+                    'email',
+                    'regex:/^[A-Za-z0-9._%+-]+@aluno\.unb\.br$/'
+                ],
                 'matricula' => 'bail|required|integer',
                 'curso' => 'bail|string',
                 'senha' => 'bail|string',
                 'avatar' => 'bail|nullable',
-                'tipo_usuario' => 'bail|integer'
             ]);
 
             $values = array_values($validated); // Padronizando Colunas para inserção SQL
@@ -92,7 +99,7 @@ class UsuariosController extends Controller
                 return to_route('register.usuario');
             }
         } catch (ValidationException|\Exception $exception) {
-            $request->session()->flash('mensagem', $exception);
+            $request->session()->flash('mensagem', $exception->getMessage());
             return to_route('register.usuario');
         }
     }

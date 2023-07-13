@@ -32,19 +32,23 @@
 
 <div class="login-container">
     <h2>Login</h2>
-    <form action="{{route('auth.usuarios')}}" method="POST">
-        @csrf
-        <div class="form-group">
-            <label for="email">E-mail</label>
-            <input type="email" class="form-control" id="email" name="email" placeholder="Informe seu e-mail">
-        </div>
-        <div class="form-group">
-            <label for="senha">Senha</label>
-            <input type="password" class="form-control" id="senha" name="senha" placeholder="Informe sua senha">
-        </div>
-        <button type="submit" class="btn btn-primary btn-block">Entrar</button>
-    </form>
-    <a href="{{route('register.usuario')}}" class="btn btn-secondary btn-block">Cadastrar</a>
+    <div class="mb-3">
+        <form action="{{route('auth.usuarios')}}" method="POST">
+            @csrf
+            <div class="form-group">
+                <label for="email">E-mail</label>
+                <input type="email" class="form-control" id="email" name="email" placeholder="Informe seu e-mail">
+            </div>
+            <div class="form-group">
+                <label for="senha">Senha</label>
+                <input type="password" class="form-control" id="senha" name="senha" placeholder="Informe sua senha">
+            </div>
+            <button type="submit" class="btn btn-primary btn-block">Entrar</button>
+        </form>
+    </div>
+    <div class="mb-3">
+        <a href="{{route('register.usuario')}}" class="btn btn-secondary btn-block">Cadastrar</a>
+    </div>
 </div>
 
 <script src="https://code.jquery.com/jquery-3.5.1.slim.min.js"></script>

@@ -15,6 +15,7 @@
             border-radius: 5px;
             background-color: #fff;
         }
+
         .registration-container h2 {
             text-align: center;
             margin-bottom: 30px;
@@ -22,6 +23,11 @@
     </style>
 </head>
 <body>
+@isset($mensagem)
+    <div class="alert alert-danger">
+        {{$mensagem}}
+    </div>
+@endisset
 <div class="registration-container">
     <h2>Registro de Usuário</h2>
     <form action="{{route('store.usuario')}}" method="POST">
@@ -32,7 +38,7 @@
         </div>
         <div class="form-group">
             <label for="email">E-mail</label>
-            <input type="email" class="form-control" id="email" name="email" placeholder="Informe seu e-mail">
+            <input type="email" class="form-control" id="email" name="email" placeholder="Informe seu e-mail @aluno.unb.br">
         </div>
         <div class="form-group">
             <label for="matricula">Matrícula</label>
@@ -49,13 +55,6 @@
         <div class="form-group">
             <label for="avatar">Avatar</label>
             <input type="file" class="form-control-file" id="avatar" name="avatar">
-        </div>
-        <div class="form-group">
-            <label for="tipo_usuario">Tipo de Usuário</label>
-            <select class="form-control" id="tipo_usuario" name="tipo_usuario">
-                <option value="1">Administrador</option>
-                <option value="2">Usuário Comum</option>
-            </select>
         </div>
         <button type="submit" class="btn btn-primary btn-block">Registrar</button>
     </form>

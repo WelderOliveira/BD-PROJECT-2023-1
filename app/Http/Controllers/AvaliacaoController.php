@@ -3,25 +3,31 @@
 namespace App\Http\Controllers;
 
 use App\Models\AvaliacoesModel;
+use App\Models\TurmasModel;
+use Illuminate\Contracts\Foundation\Application;
+use Illuminate\Contracts\View\Factory;
+use Illuminate\Contracts\View\View;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Session;
 
 class AvaliacaoController extends Controller
 {
     /**
-     * @param $filter
-     * @return array
+     * @return Application|Factory|View|\Illuminate\Foundation\Application
      */
-    public function index($filter): array
+    public function index(): Application|Factory|View|\Illuminate\Foundation\Application
     {
-        return AvaliacoesModel::getAvaliacoes($filter);
+        $responses = AvaliacoesModel::getAvaliacoes();
+        return view('avaliacao.index')->with('responses', $responses);
     }
 
     /**
-     * @return void
+     * @return Application|Factory|View|\Illuminate\Foundation\Application
      */
-    public function create()
+    public function create($id)
     {
-        //
+        $response = TurmasModel::getTurmaById($id)[0];
+        return view('avaliacao.create')->with('response', $response);
     }
 
     /**
@@ -31,17 +37,26 @@ class AvaliacaoController extends Controller
      */
     public function store(Request $request): string
     {
-        $validated = $request->validate([
-            'fk_user' => 'bail|integer',
-            'fk_turma' => 'bail|integer',
-            'nota' => 'bail|integer',
-            'descricao' => 'bail|string',
-            'fk_professor' => 'bail|integer',
-        ]);
+        $filter = [
+            'usuario' => Session::get('id'),
+            'turma' => $request->input('turma') ?? null,
+            'nota' => $request->input('nota'),
+            'descricao' => $request->input('descricao'),
+            'professor' => $request->input('professor') ?? null,
+        ];
 
-        $values = array_values($validated); // Padronizando Colunas para inserção SQL
+        $values = array_values($filter); // Padronizando Colunas para inserção SQL
 
-        return AvaliacoesModel::createAvaliacao($values);
+        try {
+            AvaliacoesModel::createAvaliacao($values);
+            $request->session()->flash('mensagem', 'Avaliação registrada com Sucesso');
+            return to_route('index.turmas');
+
+        } catch (\Exception $exception) {
+
+            $request->session()->flash('error', $exception->getMessage());
+            return to_route('index.turmas');
+        }
     }
 
     /**

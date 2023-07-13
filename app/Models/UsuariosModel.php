@@ -48,8 +48,8 @@ class UsuariosModel extends Model
         $db->beginTransaction();
         try {
             $query = "INSERT INTO tb_user
-                        (nome, email, matricula, curso, senha, avatar, tipo_usuario)
-                        VALUES (?,?,?,?,?,?,?)";
+                        (nome, email, matricula, curso, senha, avatar, admin)
+                        VALUES (?,?,?,?,?,?,false)";
 
             $db->statement($query, $values);
             $db->commit();

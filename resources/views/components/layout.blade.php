@@ -6,11 +6,12 @@
           content="width=device-width, user-scalable=no, initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0">
     <meta http-equiv="X-UA-Compatible" content="ie=edge">
     <title>{{ $title }}</title>
+    @yield('style')
     @vite(['resources/css/app.scss', 'resources/js/app.js'])
 </head>
 <body>
 @includeIf('components.navbar')
-<div class="container">
+<div class="container mt-3">
     @if(session('mensagem'))
         <div class="alert alert-success" role="alert">
             {{  session('mensagem') }}

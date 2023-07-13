@@ -6,6 +6,7 @@ use App\Constantes\Conexoes;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Support\Facades\DB;
+use Throwable;
 
 class AvaliacoesModel extends Model
 {
@@ -15,16 +16,16 @@ class AvaliacoesModel extends Model
      * @param $filter
      * @return array
      */
-    public static function getAvaliacoes($filter): array
+    public static function getAvaliacoes($filter = []): array
     {
-        $query = 'SELECT * FROM tb_avaliacao WHERE 1 = 1';
+        $query = 'SELECT * FROM vw_avaliacao WHERE 1 = 1';
 
-        if (!empty($id_user = $filter['id_user'])) {
-            $query .= " AND fk_user = '$id_user'";
+        if (isset($filtro['id_user']) && !empty($id_user = $filter['id_user'])) {
+            $query .= " AND id_user = '$id_user'";
         }
 
-        if (!empty($id_turma = $filter['id_turma'])) {
-            $query .= " AND fk_turma = '$id_turma'";
+        if (isset($filter['id_turma']) && !empty($id_turma = $filter['id_turma'])) {
+            $query .= " AND id_turma = '$id_turma'";
         }
 
         return DB::select($query);

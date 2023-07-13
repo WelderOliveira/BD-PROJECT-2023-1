@@ -1,4 +1,4 @@
-<x-layout title="Criar">
+<x-layout title="Turmas">
     <form action="{{ route('index.turmas') }}" method="GET" class="form-inline">
         <div class="row mb-3">
             <div class="col-md-4 mr-2">
@@ -54,7 +54,12 @@
                             <button type="submit" class="btn btn-danger"><i class="fa-solid fa-trash"></i></button>
                         </form>
                     @endif
-                    <button type="button" class="btn btn-info"><i class="fa-solid fa-eye"></i></button>
+                    <form action="{{route('show.turma', $turma->id)}}" method="get">
+                        <button type="submit" class="btn btn-info"><i class="fa-solid fa-eye"></i></button>
+                    </form>
+                    <form action="{{route('create.avaliacao', $turma->id)}}" method="get">
+                        <button type="submit" class="btn btn-info"><i class="fa-regular fa-comments"></i></button>
+                    </form>
                 </td>
             </tr>
         @endforeach
