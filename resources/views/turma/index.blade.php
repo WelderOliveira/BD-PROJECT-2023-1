@@ -46,20 +46,29 @@
                 <td>{{$turma->disciplina}}</td>
                 <td>{{$turma->departamento}}</td>
                 <td>
-                    @if(session()->has('admin'))
-                        <form action="{{route('delete.turmas',$turma->id)}}" method="POST">
-                            {{ csrf_field() }}
-                            {{ method_field('DELETE') }}
+                    <div class="mx-1">
+                        @if(session()->has('admin'))
+                            <form action="{{route('delete.turmas',$turma->id)}}" method="POST">
+                                {{ csrf_field() }}
+                                {{ method_field('DELETE') }}
 
-                            <button type="submit" class="btn btn-danger"><i class="fa-solid fa-trash"></i></button>
+                                <button type="submit" class="btn btn-danger"><i class="fa-solid fa-trash"></i></button>
+                            </form>
+                        @endif
+                    </div>
+                    <div class="mx-1 mt-1">
+                        <form action="{{route('show.turma', $turma->id)}}" method="get">
+                            <button type="submit" class="btn btn-info"><i class="fa-solid fa-eye"></i></button>
                         </form>
+                    </div>
+                    @if(session()->has('id'))
+                        <div class="mx-1 mt-1">
+                            <form action="{{route('create.avaliacao', $turma->id)}}" method="get">
+                                <button type="submit" class="btn btn-info"><i class="fa-regular fa-comments"></i>
+                                </button>
+                            </form>
+                        </div>
                     @endif
-                    <form action="{{route('show.turma', $turma->id)}}" method="get">
-                        <button type="submit" class="btn btn-info"><i class="fa-solid fa-eye"></i></button>
-                    </form>
-                    <form action="{{route('create.avaliacao', $turma->id)}}" method="get">
-                        <button type="submit" class="btn btn-info"><i class="fa-regular fa-comments"></i></button>
-                    </form>
                 </td>
             </tr>
         @endforeach

@@ -32,11 +32,13 @@
                             </div>
                             <div class="col">
                                 <div style="text-align: right">
-                                    <form action="{{route('denuncia.avaliacao', $comment->id)}}" method="post">
-                                        @csrf
-                                        <button type="submit" class="btn btn-info"><i
-                                                class="fa-regular fa-circle-question"></i></button>
-                                    </form>
+                                    @if(session()->has('id'))
+                                        <form action="{{route('denuncia.avaliacao', $comment->id)}}" method="post">
+                                            @csrf
+                                            <button type="submit" class="btn btn-info"><i
+                                                    class="fa-regular fa-circle-question"></i></button>
+                                        </form>
+                                    @endif
                                     <div class="mt-1">
                                         @if(session()->has('admin'))
                                             <form action="{{route('delete.avaliacao',$comment->id)}}" method="POST">
