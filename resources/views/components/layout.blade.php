@@ -11,11 +11,16 @@
 <body>
 @includeIf('components.navbar')
 <div class="container">
-    @if (session('status'))
+    @if(session('mensagem'))
         <div class="alert alert-success" role="alert">
-            {{ session('status') }}
+            {{  session('mensagem') }}
+        </div>
+    @elseif(session('error'))
+        <div class="alert alert-danger" role="alert">
+            {{session('error')}}
         </div>
     @endif
+
     {{$slot}}
 </div>
 </body>

@@ -12,11 +12,18 @@ class TurmaController extends Controller
 {
     /**
      * @param array $filter
-     * @return \Illuminate\Contracts\Foundation\Application|Factory|View|Application
+     * @return \Illuminate\Contracts\Foundation\Application|Application|Factory|View
      */
-    public function index(array $filter = []): Application|View|Factory|\Illuminate\Contracts\Foundation\Application
+    public function index(Request $request): \Illuminate\Contracts\Foundation\Application|Factory|View|Application
     {
+        $filter = [
+            'filtro_departamento' => $request->input('filtro_departamento') ?? null,
+            'filtro_disciplina' => $request->input('filtro_disciplina') ?? null,
+            'filtro_professor' => $request->input('filtro_professor') ?? null,
+        ];
+
         $turmas = TurmasModel::getTurmas($filter);
+
         return view('turma.index')->with('turmas', $turmas);
     }
 
@@ -97,16 +104,23 @@ class TurmaController extends Controller
     }
 
     /**
+     * @param Request $request
      * @param int $id
      * @return string
      * @throws \Throwable
      */
-    public function destroy(int $id): string
+    public function destroy(Request $request, int $id): string
     {
         try {
-            return TurmasModel::deleteTurma($id);
+
+            TurmasModel::deleteTurma($id);
+            $request->session()->flash('mensagem', 'Turma removida com Sucesso');
+            return to_route('index.turmas');
+
         } catch (\Exception $exception) {
-            return $exception->getMessage();
+
+            $request->session()->flash('error', $exception->getMessage());
+            return to_route('index.turmas');
         }
     }
 }

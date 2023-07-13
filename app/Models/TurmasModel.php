@@ -13,31 +13,31 @@ class TurmasModel extends Model
     use HasFactory;
 
     /**
-     * @param array $filter
+     * @param array $filtro
      * @return array
      */
-    public static function getTurmas(array $filter): array
+    public static function getTurmas(array $filtro): array
     {
         $query = 'SELECT * FROM vw_turma WHERE 1 = 1';
 
-        if (isset($filter['periodo']) && !empty($periodo = $filter['periodo'])) {
+        if (isset($filtro['periodo']) && !empty($periodo = $filtro['periodo'])) {
             $query .= " AND periodo = '$periodo'";
         }
 
-        if (isset($filter['professor']) && !empty($professor = $filter['professor'])) {
-            $query .= " AND professor LIKE %'$professor'%";
+        if (isset($filtro['filtro_professor']) && !empty($professor = $filtro['filtro_professor'])) {
+            $query .= " AND professor LIKE '%$professor%'";
         }
 
-        if (isset($filter['horario']) && !empty($horario = $filter['horario'])) {
-            $query .= " AND horario LIKE %'$horario'%";
+        if (isset($filtro['horario']) && !empty($horario = $filtro['filtro_horario'])) {
+            $query .= " AND horario LIKE '%$horario%'";
         }
 
-        if (isset($filter['disciplina']) && !empty($disciplina = $filter['disciplina'])) {
-            $query .= " AND disciplina = '$disciplina'";
+        if (isset($filtro['filtro_disciplina']) && !empty($disciplina = $filtro['filtro_disciplina'])) {
+            $query .= " AND disciplina LIKE '%$disciplina%'";
         }
 
-        if (isset($filter['carga_horaria']) && !empty($departamento = $filter['carga_horaria'])) {
-            $query .= " AND carga_horaria = '$departamento'";
+        if (isset($filtro['filtro_departamento']) && !empty($departamento = $filtro['filtro_departamento'])) {
+            $query .= " AND departamento LIKE '%$departamento%'";
         }
         $query .= " LIMIT 20";
 

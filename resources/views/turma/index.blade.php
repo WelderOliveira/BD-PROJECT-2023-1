@@ -1,4 +1,24 @@
 <x-layout title="Criar">
+    <form action="{{ route('index.turmas') }}" method="GET" class="form-inline">
+        <div class="row mb-3">
+            <div class="col-md-4 mr-2">
+                <input type="text" class="form-control" id="filtro_professor" name="filtro_professor"
+                       placeholder="Filtrar por Professor">
+            </div>
+            <div class="col-md-3 mr-2">
+                <input type="text" class="form-control" id="filtro_disciplina" name="filtro_disciplina"
+                       placeholder="Filtrar por Disciplina">
+            </div>
+            <div class="col-md-4 mr-2">
+                <input type="text" class="form-control" id="filtro_departamento" name="filtro_departamento"
+                       placeholder="Filtrar por Departamento">
+            </div>
+            <div class="col-md-1">
+                <button type="submit" class="btn btn-outline-secondary"><i class="fa-solid fa-magnifying-glass"></i>
+                </button>
+            </div>
+        </div>
+    </form>
     <table class="table">
         <thead>
         <tr>
@@ -27,7 +47,12 @@
                 <td>{{$turma->departamento}}</td>
                 <td>
                     @if(session()->has('id'))
-                        <button type="button" class="btn btn-danger"><i class="fa-solid fa-trash"></i></button>
+                        <form action="{{route('delete.turmas',$turma->id)}}" method="POST">
+                            {{ csrf_field() }}
+                            {{ method_field('DELETE') }}
+
+                            <button type="submit" class="btn btn-danger"><i class="fa-solid fa-trash"></i></button>
+                        </form>
                     @endif
                     <button type="button" class="btn btn-info"><i class="fa-solid fa-eye"></i></button>
                 </td>
