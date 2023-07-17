@@ -66,7 +66,7 @@ class TurmasModel extends Model
 
         try {
             $query = "INSERT INTO tb_turma
-                        (periodo, fk_professor, horario, vagas_ocupadas, total_vagas, local, fk_disciplina, carga_horaria)
+                        (periodo, professor, horario, vagas_ocupadas, total_vagas, local, fk_disciplina, fk_departamento)
                         VALUES (?,?,?,?,?,?,?,?)";
 
             $db->statement($query, $values);

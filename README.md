@@ -20,6 +20,33 @@ Laravel is a web application framework with expressive, elegant syntax. We belie
 - [Real-time event broadcasting](https://laravel.com/docs/broadcasting).
 
 Laravel is accessible, powerful, and provides tools required for large, robust applications.
+
+## Infos
+
+- O modelos Relacionais e Modelo Entidade Relacionamento estão alocados na pasta
+  1. [x] **relatorio**
+- Os scripts SQL com a criação estruturada do banco de dados estão divididos em 2 arquivos
+  - Criação da **Estrutura** da Base de Dados:
+    1. [x] database/files/bd_struct_2023_1.sql
+  - Criação da Base de Dados com **população das tabelas**
+    1. [x] database/files/bd_project_2023_1.sql
+- Cadama de persistencia e scripts de utilização no código estão no caminho
+  - **app/Models**
+- Camada de Visualização com arquivos html estão no caminho
+  - **resources/views**
+- Camada de Controladores com arquivos de regras lógicas e manipulações estão no caminho
+  - **app/Http/Controllers**
+
+---
+- Utilize esse acesso como exemplo de Admin.
+  ```sh
+  - Admin
+    Email: admin@admin.com
+    Senha: admin 
+    ```
+---
+- Obs: Não é necessário que importe os arquivos SQL, com os comandos de instalação da aplicação já irá criar automaticamente a estrutura no banco de dados, desde que você realize a configurações corretas da conexão ao SGBD.
+
 ## Dependências
 
 - PHP >= 8.1

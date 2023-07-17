@@ -52,7 +52,7 @@ class TurmaController extends Controller
             'total_vagas' => 'bail|integer',
             'local' => 'bail|string',
             'fk_disciplina' => 'bail|string',
-            'carga_horaria' => 'bail|integer',
+            'fk_departamento' => 'bail|integer',
         ]);
 
         $values = array_values($validated); // Padronizando Colunas para inserção SQL
